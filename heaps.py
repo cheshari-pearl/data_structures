@@ -1,4 +1,5 @@
 import heapq
+from collections import Counter
 
 nums = [10, 20, 43, 1, 2, 65, 17, 44, 2, 3, 1]
 heapq.heapify(nums)
@@ -93,57 +94,17 @@ print(arr, k)
 
 
 
-#QUESTION 2. Amazon
-class ListNode:
-   def __init__(self, value=0, next=None):
-       self.value = value
-       self.next = next
+#QUESTION 2
+def top_k_frequent(nums, k):
+# Count the frequency of each element in the list using Counter
+    count = Counter(nums)
+   # Create a list of the k most frequent elements using a max-heap
+    # The heapq.nlargest function will return the k largest items based on the specified key function
+    return [item for item, _ in heapq.nlargest(k, count.items(), key=lambda x: x[1])]
 
+#example
+print(top_k_frequent([1,1,1,2,2,3], 2))  # Output: [1, 2]
 
-   def __lt__(self, other):
-       return self.value < other.value
-
-
-def merge_k_sorted_lists(lists):
-   min_heap = []
-  
-   for l in lists:
-       if l:
-           heapq.heappush(min_heap, l)
-  
-   # Create a dummy node to help with result construction
-   dummy = ListNode()
-   current = dummy
-  
-   while min_heap:
-       # Extract the smallest element
-       node = heapq.heappop(min_heap)
-       current.next = node
-       current = current.next
-       # If there are more elements in the same list, add the next element to the heap
-       if node.next:
-           heapq.heappush(min_heap, node.next)
-  
-   return dummy.next
-
-
-# Helper function to print the linked list
-def print_linked_list(node):
-   while node:
-       print(node.value, end=" -> ")
-       node = node.next
-   print("None")
-
-
-# Example usage
-list1 = ListNode(1, ListNode(4, ListNode(5)))
-list2 = ListNode(1, ListNode(3, ListNode(4)))
-list3 = ListNode(2, ListNode(6))
-
-
-lists = [list1, list2, list3]
-merged_list = merge_k_sorted_lists(lists)
-print_linked_list(merged_list)
 
 
 
@@ -194,23 +155,20 @@ print(f"The {k}rd largest element is {third_largest}")
 
 
 
-#NO6. AMAZON
+#QUESTION 5. AMAZON
 class MaxHeap:
     def __init__(self):
         self.heap = []
 
     def insert(self, value):
-        # Add the new element at the end of the heap
         self.heap.append(value)
-        # Restore the max-heap property
         self._heapify_up(len(self.heap) - 1)
 
     def _heapify_up(self, index):
         parent_index = (index - 1) // 2
         if index > 0 and self.heap[index] > self.heap[parent_index]:
-            # Swap the current element with its parent
             self.heap[index], self.heap[parent_index] = self.heap[parent_index], self.heap[index]
-            # Recursively heapify the parent
+           
             self._heapify_up(parent_index)
 
     def __str__(self):
@@ -221,30 +179,3 @@ heap = MaxHeap()
 heap.insert(10)
 heap.insert(20)
 print( heap)
-
-
-
-
-
-
-
-
-
-
-
-
-def find_kth_largest(nums, k):
-    min_heap = []
-    
-    for num in nums:
-        heapq.heappush(min_heap, num)
-        if len(min_heap) > k:
-            heapq.heappop(min_heap)
-    
-#     return min_heap[0]
-
-# Example usage
-nums = [3, 2, 1, 5, 6, 4]
-k = 3
-third_largest = find_kth_largest(nums, k)
-print(f"The {k}rd largest element is {third_largest}")
